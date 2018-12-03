@@ -13,10 +13,10 @@ opener  = request.build_opener()
 
 
 class Data:
- """This is class for data manipulations, 
- it conforms to seperation of concerns as much as possible.
- by setting the file url, destination file, and additional fieldnames of the file,
- you are good to go."""
+  """This is class for data manipulations, 
+  it conforms to seperation of concerns as much as possible.
+  by setting the file url, destination file, and additional fieldnames of the file,
+  you are good to go."""
  
   
   def __init__(self,file_location,destination,*fieldnames):
@@ -34,7 +34,7 @@ class Data:
     elif self.file[:3].lower() == 'www':
       self.file = 'http://%s'%self.file
       
-    elif self.file.startswith('C:\') or self.file.startswith('/usr'):
+    elif self.file.startswith('C:\\') or self.file.startswith('/usr'):
        self.file_loc = 'local'
       
     else:
