@@ -41,7 +41,7 @@ class Data:
     else:
       return """Your location is invalid, 
       it must start with 'http' or 'www' for internet file, 
-      'C:\' for windows files or '/usr' for Linux files. "
+      'C:\' for windows files or '/usr' for Linux files. """
     
     self.process_request()
       
