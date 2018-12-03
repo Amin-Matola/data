@@ -1,7 +1,7 @@
 #|-------------------A module for data digging----------------------|
 #|-----------------Last touched by Amin Matola----------------------|
-#|-------------------Import required modules------------------------|
 
+#|-------------------Import required modules------------------------|
 from urllib import request
 import csv
 import json
@@ -39,7 +39,10 @@ class Data:
     self.process_request()
       
    def process_request(self):
-    self.remote_file = opener.open(self.file)
+    try:
+     self.remote_file = opener.open(self.file)
+    except Exception as e:
+      return "Error openning file at %s.\n %s"%(self.dest,e)
     self.remote_file_bytes = remote_file.read()
     self.remote_file_string= remote_file.decode()
     self.process_data()
@@ -48,8 +51,8 @@ class Data:
     self.file_lines = self.remote_file.split('\n')
     if len(self.data_fields):
       self.file_dict  = csv.DictReader(self.file_lines,fieldnames=self.data_fields[0])
-     else:
-      self.file_dict  = csv.reader(self.file_lines)
+    else:
+      self.file_dict  = list(csv.reader(self.file_lines))
       self.convert_to_json()
       
    def convert_to_json(self):
@@ -57,9 +60,15 @@ class Data:
      write_to_json_file()
      
    def write_to_json_file(self):
-    #------- Now store results, the 'with' will automatically close the file------|
-     with open(self.dest,'r+') as storage:
+    #------- Now store results, the 'with' will automatically close the file once done.------|
+     try:
+      with open(self.dest,'r+') as storage:
        storage.write(self.json_data)
+     except Exception as e:
+        self.error = """Wo! Wo! Wait, there an error writing to %s, 
+                       please check destinatin file.\n The error return was %"%(self.dest,self.error)
+        return self.error
+   
        
    def __str__(self):
       self.date = datetime.datetime.now().strftime('%d %B %Y')
