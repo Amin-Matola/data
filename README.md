@@ -1,2 +1,3 @@
 # data
-The data manipulations repo
+This is the repository for data and data manipulations.
+The data scientists, data analysts data diggers etc are good to pull.
