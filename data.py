@@ -24,15 +24,19 @@ class Data:
     self.file = file_location
     self.dest = destination
     self.data_fields = fieldnames
+    self.file_loc = 'internet'
     self.check_inputs()
     
    def check_inputs(self):
-    #-----------The url must start with 'http(s)' for urllib to open it successfully-------|
+    #-----------The url must start with 'http(s)' for urllib to open it successfully,otherwise it is on local disk-------|
     if self.file.lower().startswith('http'):
       pass
     
     elif self.file[:3].lower() == 'www':
       self.file = 'http://%s'%self.file
+      
+    elif self.file.startswith('C:\') or self.file.startswith(r'/usr'):
+       self.file_loc = 'local'
       
     else:
       return "Your location is invalid, it must start with 'http' or 'www'"
@@ -40,16 +44,21 @@ class Data:
     self.process_request()
       
    def process_request(self):
-    try:
-     self.remote_file = opener.open(self.file)
-    except Exception as e:
-      return "Error openning file at %s.\n %s"%(self.dest,e)
-    self.remote_file_bytes = remote_file.read()
-    self.remote_file_string= remote_file.decode()
+    if self.file_loc == 'internet': #------Then process url--------#                  
+      try:
+        self.remote_file = opener.open(self.file)
+        self.remote_file_bytes = remote_file.read()
+        self.remote_file_string= remote_file.decode()
+      except Exception as e:
+        return "Error openning file at %s.\n %s"%(self.dest,e)
+    else: #--------Then it is a file in a local disk----------------|
+        self.remote_file = open(self.dest)
+        self.remote_file_string = remote_file.read()
+     
     self.process_data()
     
    def process_data(self):
-    self.file_lines = self.remote_file.split('\n')
+    self.file_lines = self.remote_file_string.split('\n')
     if len(self.data_fields):
       self.file_dict  = csv.DictReader(self.file_lines,fieldnames=self.data_fields[0])
     else:
