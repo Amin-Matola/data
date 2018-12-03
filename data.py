@@ -72,7 +72,7 @@ class Data:
        
    def __str__(self):
       self.date = datetime.datetime.now().strftime('%d %B %Y')
-      return "This class handles remote csv files.\n"+"*"*40+"Called at %s"%self.date
+      return "This class handles remote csv files.\n"+"*"*40+"\nCalled at %s"%self.date
       
      
       
