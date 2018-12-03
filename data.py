@@ -22,8 +22,8 @@ class Data:
    def __init__(self,file_location,destination,*fieldnames):
     self.file = file_location
     self.dest = destination
-    self.check_inputs()
     self.data_fields = fieldnames
+    self.check_inputs()
     
    def check_inputs(self):
     #-----------The url must start with 'http(s)' for urllib to open it successfully-------|
