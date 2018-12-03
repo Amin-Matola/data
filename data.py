@@ -68,6 +68,7 @@ class Data:
         self.error = """Wo! Wo! Wait, there an error writing to %s, 
                        please check destination file location.\n The error return was %"%(self.dest,self.error)
         return self.error
+     return "JSON Data written into %s successfully!"%self.dest
    
        
    def __str__(self):
