@@ -11,12 +11,13 @@ import os
 
 opener  = request.build_opener()
 
+
 class Data:
   """This is class for data manipulations,
   it conforms to seperation of concerns as much as possible.
   by setting the file url, destination file, and additional fieldnames of the file,
   you are good to go."""
-  
+
   global opener
 
 
@@ -24,28 +25,26 @@ class Data:
     self.file = file_location
     self.dest = destination
     self.data_fields = fieldnames
-    self.file_loc = 'internet'
     self.check_inputs()
 
   def check_inputs(self):
+    print('Checking inputs...')
     #-----------The file location must start with 'http(s)' for urllib to open it successfully,otherwise it is on local disk-------|
     if self.file.lower().startswith('http'):
-      pass
+        self.file=self.file_location
+        self.file_loc = 'internet'
 
     elif self.file[:3].lower() == 'www':
       self.file = 'http://%s'%self.file
-
-    elif self.file.startswith('C:\\') or self.file.startswith('/usr'):
-       self.file_loc = 'local'
+      self.file_loc = 'internet'
 
     else:
-      return """Your location is invalid,
-      it must start with 'http' or 'www' for internet file,
-      'C:\' for windows files or '/usr' for Linux files. """
+        self.file_loc = 'local'
 
     self.process_request()
 
   def process_request(self):
+    print('processing request...')
     if self.file_loc == 'internet': #------Then process url--------#
       try:
         self.remote_file = opener.open(self.file)
@@ -54,28 +53,45 @@ class Data:
       except Exception as e:
         return "Error openning file at %s.\n %s"%(self.dest,e)
     else: #--------Then it is a file in a local disk----------------|
-        self.remote_file = open(self.dest)
+        self.remote_file = open(self.dest,'r+')
         self.remote_file_string = self.remote_file.read()
 
     self.process_data()
 
   def process_data(self):
-    self.file_lines = self.remote_file_string.split('\n')
+    print('processing request data...')
+    if self.file_loc=='internet':
+        self.file_lines = self.remote_file_string.split('\n')
+        self.comma_list = [a.split(',') for a in self.file_lines]
+        self.data_list  = []
+        for b in self.comma_list:
+            self.data_list += b
+        self.file_lines = self.data_list
+
+    else:
+        self.file_lines = self.remote_file_string
+
+
+
     if len(self.data_fields):
       self.file_dict  = csv.DictReader(self.file_lines,fieldnames=self.data_fields[0])
     else:
-      self.file_dict  = list(csv.reader(self.file_lines))
-      self.convert_to_json()
+      return "The syntax for calling this class is data=Data(file_location,destination_file,iterable_field_names)"
+    self.convert_to_json()
 
   def convert_to_json(self):
+     print('converting to json...')
      self.json_data = json.dumps([line for line in self.file_dict])
      self.write_to_json_file()
 
   def write_to_json_file(self):
+     print('writing to json file...')
     #------- Now store json results, the 'with' will automatically close the file once done.------|
      try:
-      with open(self.dest,'r+') as storage:
-       storage.write(self.json_data)
+      self.local_file = open(self.dest,'w+')
+      self.local_file.write(self.json_data)
+      self.local_file.close()
+
      except Exception as e:
         self.error = """Wo! Wo! Wait, there was an error writing to %s,
                        please check destination file location.\n The error returned was %"""%(self.dest,self.error)
@@ -93,7 +109,7 @@ class Data:
         else:
            return self.error
 
-     return "JSON Data written into %s successfully!"%self.dest
+     print("JSON Data written into %s successfully!"%self.dest)
 
 
   def __str__(self):
