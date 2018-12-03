@@ -28,18 +28,20 @@ class Data:
     self.check_inputs()
     
    def check_inputs(self):
-    #-----------The url must start with 'http(s)' for urllib to open it successfully,otherwise it is on local disk-------|
+    #-----------The file location must start with 'http(s)' for urllib to open it successfully,otherwise it is on local disk-------|
     if self.file.lower().startswith('http'):
       pass
     
     elif self.file[:3].lower() == 'www':
       self.file = 'http://%s'%self.file
       
-    elif self.file.startswith('C:\') or self.file.startswith(r'/usr'):
+    elif self.file.startswith('C:\') or self.file.startswith('/usr'):
        self.file_loc = 'local'
       
     else:
-      return "Your location is invalid, it must start with 'http' or 'www'"
+      return """Your location is invalid, 
+      it must start with 'http' or 'www' for internet file, 
+      'C:\' for windows files or '/usr' for Linux files. "
     
     self.process_request()
       
