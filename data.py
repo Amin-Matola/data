@@ -6,6 +6,7 @@ from urllib import request
 import csv
 import json
 import datetime
+import os
 
 
 opener  = request.build_opener()
@@ -67,7 +68,20 @@ class Data:
      except Exception as e:
         self.error = """Wo! Wo! Wait, there was an error writing to %s, 
                        please check destination file location.\n The error returned was %"%(self.dest,self.error)
-        return self.error
+                       
+        choice     = input(self.error+"\n Would you like us to create this file for you in the current directory?(y/n)")
+        if choice.lower()=='y':
+          if len(self.dest.split('/'))>1:
+           self.dest = os.mknod(os.path.join(os.getcwd(),self.dest.split('/')[-1]))
+           
+           #-------------Go to storage processing again--------|
+           write_to_json()
+          else:
+            self.dest = os.mknod(os.getcwd()+self.dest)
+            write_to_json()
+        else:
+           return self.error
+        
      return "JSON Data written into %s successfully!"%self.dest
    
        
