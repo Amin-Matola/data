@@ -78,7 +78,7 @@ class Data:
        storage.write(self.json_data)
      except Exception as e:
         self.error = """Wo! Wo! Wait, there was an error writing to %s, 
-                       please check destination file location.\n The error returned was %"%(self.dest,self.error)
+                       please check destination file location.\n The error returned was %"""%(self.dest,self.error)
                        
         choice     = input(self.error+"\n Would you like us to create this file for you in the current directory?(y/n)")
         if choice.lower()=='y':
