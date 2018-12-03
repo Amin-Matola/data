@@ -60,13 +60,13 @@ class Data:
      write_to_json_file()
      
    def write_to_json_file(self):
-    #------- Now store results, the 'with' will automatically close the file once done.------|
+    #------- Now store json results, the 'with' will automatically close the file once done.------|
      try:
       with open(self.dest,'r+') as storage:
        storage.write(self.json_data)
      except Exception as e:
-        self.error = """Wo! Wo! Wait, there an error writing to %s, 
-                       please check destination file location.\n The error return was %"%(self.dest,self.error)
+        self.error = """Wo! Wo! Wait, there was an error writing to %s, 
+                       please check destination file location.\n The error returned was %"%(self.dest,self.error)
         return self.error
      return "JSON Data written into %s successfully!"%self.dest
    
