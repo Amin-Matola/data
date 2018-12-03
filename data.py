@@ -68,19 +68,23 @@ class Data:
             self.data_list += b
         self.file_lines = self.data_list
 
-    else:
-        self.file_lines = self.remote_file_string
 
 
 
     if len(self.data_fields):
-      self.file_dict  = csv.DictReader(self.file_lines,fieldnames=self.data_fields[0])
+        if self.file.lower().startswith('internet'):
+            print('reading internet lists from %s...'%self.dest)
+            self.file_dict  = csv.DictReader(self.file_lines,fieldnames=self.data_fields[0])
+        else:
+            print('reading the local opening of %s...'%self.dest)
+            self.file_dict  = csv.DictReader(open(self.file),fieldnames=self.data_fields[0])
+
     else:
       return "The syntax for calling this class is data=Data(file_location,destination_file,iterable_field_names)"
     self.convert_to_json()
 
   def convert_to_json(self):
-     print('converting to json...')
+     print('converting to %s json...'%str(self.file_dict))
      self.json_data = json.dumps([line for line in self.file_dict])
      self.write_to_json_file()
 
