@@ -17,11 +17,11 @@ class Data:
  by setting the file url, destination file, and additional fieldnames of the file,
  you are good to go."""
  
-   def __init__(self,file,destination,*args):
+   def __init__(self,file,destination,*fieldnames):
     self.file = file
     self.dest = destination
     self.check_inputs()
-    self.data_fields = args
+    self.data_fields = fieldnames
     
    def check_inputs(self):
     #-----------The url must start with 'http(s)' for urllib to open it successfully-------|
