@@ -18,16 +18,16 @@ class Data:
  by setting the file url, destination file, and additional fieldnames of the file,
  you are good to go."""
  
-   global opener
+  global opener
   
-   def __init__(self,file_location,destination,*fieldnames):
+  def __init__(self,file_location,destination,*fieldnames):
     self.file = file_location
     self.dest = destination
     self.data_fields = fieldnames
     self.file_loc = 'internet'
     self.check_inputs()
     
-   def check_inputs(self):
+  def check_inputs(self):
     #-----------The file location must start with 'http(s)' for urllib to open it successfully,otherwise it is on local disk-------|
     if self.file.lower().startswith('http'):
       pass
@@ -45,7 +45,7 @@ class Data:
     
     self.process_request()
       
-   def process_request(self):
+  def process_request(self):
     if self.file_loc == 'internet': #------Then process url--------#                  
       try:
         self.remote_file = opener.open(self.file)
@@ -59,7 +59,7 @@ class Data:
      
     self.process_data()
     
-   def process_data(self):
+  def process_data(self):
     self.file_lines = self.remote_file_string.split('\n')
     if len(self.data_fields):
       self.file_dict  = csv.DictReader(self.file_lines,fieldnames=self.data_fields[0])
@@ -67,11 +67,11 @@ class Data:
       self.file_dict  = list(csv.reader(self.file_lines))
       self.convert_to_json()
       
-   def convert_to_json(self):
+  def convert_to_json(self):
      self.json_data = json.dumps([line for line in self.file_dict])
      write_to_json_file()
      
-   def write_to_json_file(self):
+  def write_to_json_file(self):
     #------- Now store json results, the 'with' will automatically close the file once done.------|
      try:
       with open(self.dest,'r+') as storage:
@@ -96,7 +96,7 @@ class Data:
      return "JSON Data written into %s successfully!"%self.dest
    
        
-   def __str__(self):
+  def __str__(self):
       self.date = datetime.datetime.now().strftime('%d %B %Y')
       return "This class handles remote csv files.\n"+"*"*40+"\nCalled at %s"%self.date
       
