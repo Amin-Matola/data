@@ -18,7 +18,6 @@ class Data:
  by setting the file url, destination file, and additional fieldnames of the file,
  you are good to go."""
  
-  global opener
   
   def __init__(self,file_location,destination,*fieldnames):
     self.file = file_location
