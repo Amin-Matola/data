@@ -19,8 +19,8 @@ class Data:
  
    global opener
   
-   def __init__(self,file,destination,*fieldnames):
-    self.file = file
+   def __init__(self,file_location,destination,*fieldnames):
+    self.file = file_location
     self.dest = destination
     self.check_inputs()
     self.data_fields = fieldnames
@@ -66,7 +66,7 @@ class Data:
        storage.write(self.json_data)
      except Exception as e:
         self.error = """Wo! Wo! Wait, there an error writing to %s, 
-                       please check destinatin file.\n The error return was %"%(self.dest,self.error)
+                       please check destination file location.\n The error return was %"%(self.dest,self.error)
         return self.error
    
        
