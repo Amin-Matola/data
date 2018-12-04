@@ -8,9 +8,7 @@ import json
 import datetime
 import os
 
-
 opener  = request.build_opener()
-
 
 class Data:
   """This is class for data manipulations,
@@ -19,7 +17,6 @@ class Data:
   you are good to go."""
 
   global opener
-
 
   def __init__(self,file_location,destination,iterable_fieldnames=[]):
     self.file = file_location
@@ -54,8 +51,6 @@ class Data:
         return "Error openning file at %s.\n %s"%(self.file,e)
     else: #--------Then it is a file in a local disk----------------|
         self.remote_file_string = open(self.file,'r+')
-
-
     self.process_data()
 
   def process_data(self):
@@ -75,7 +70,6 @@ class Data:
         else:
             print('reading the local opening of %s...'%self.file)
             self.file_dict  = csv.DictReader(self.remote_file_string,fieldnames=self.data_fields)
-
     else:
       print("-"*40,"\nOops! Oops! The syntax for calling this class is data=Data(file_location,destination_file,iterable_column_names).\nPlease try again")
       return
@@ -96,7 +90,7 @@ class Data:
           self.local_file.write(a)
           self.local_file.write('\n')
      self.local_file.close()
-
+    
      print("JSON Data written into %s successfully!"%self.dest)
 
   def __str__(self):
