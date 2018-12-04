@@ -94,24 +94,7 @@ class Data:
   def write_to_json_file(self):
      print('writing json data to %s...'%self.dest)
     #------- Now store json results, the 'with' will automatically close the file once done.------|
-     try:
-      self.local_file = open(self.dest,'w+')
-     except Exception as e:
-        self.error = """Wo! Wo! Wait, there was an error writing to %s,
-                       please check destination file location.\n The error returned was %"""%(self.dest,self.error)
-
-        self.choice     = input(self.error+"\n Would you like us to create this file for you in the current directory?(y/n)")
-        if self.choice.lower()=='y':
-          if len(self.dest.split('/'))>1:
-           self.dest = os.mknod(os.path.join(os.getcwd(),self.dest.split('/')[-1]))
-
-           #-------------Go to storage processing again--------|
-           self.write_to_json_file()
-          else:
-            self.dest = os.mknod(os.getcwd()+self.dest)
-            self.write_to_json_file()
-        else:
-           return self.error
+     self.local_file = open(self.dest,'w+')
      for a in self.json_data:
           self.local_file.write(a)
           self.local_file.write('\n')
