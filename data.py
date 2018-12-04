@@ -59,7 +59,7 @@ class Data:
     self.process_data()
 
   def process_data(self):
-    print('processing request data...')
+    print('processing response data...')
     if self.file_loc=='internet':
         self.file_lines = self.remote_file_string.split('\n')
         self.comma_list = [a.split(',') for a in self.file_lines]
@@ -71,7 +71,7 @@ class Data:
 
 
 
-    if len(self.data_fields):
+    if len(self.data_fields)>0:
         if self.file_loc.lower().startswith('internet'):
             print('reading internet lists from %s...'%self.dest)
             self.file_dict  = csv.DictReader(self.remote_file_string,fieldnames=self.data_fields)
@@ -80,7 +80,8 @@ class Data:
             self.file_dict  = csv.DictReader(self.remote_file_string,fieldnames=self.data_fields)
 
     else:
-      return "The syntax for calling this class is data=Data(file_location,destination_file,iterable_field_names)"
+      print("-"*40,"\nOops! Oops! The syntax for calling this class is data=Data(file_location,destination_file,iterable_column_names).\nPlease try again")
+      return
     self.convert_to_json()
 
   def convert_to_json(self):
