@@ -4,6 +4,7 @@
 
 from xlrd import open_workbook as owork
 from urllib import request
+import csv
 import json
 
 
@@ -20,7 +21,14 @@ class Json_convertor:
     
     self.process_workbook()
     
-  def process_workbook(self):  
+  def process_workbook(self):
+    if self.source.lower().startswith('http'):
+      self.source_data  = opener.open(self.source).read().decode()
+      self.data_headers = self.source_data.split('\n')[0].split(',')
+      self.sourceLines  = self.source_data.split('\n').split(',') #------2D array/DataFrame--------
+      self.net_list     = [a for a in [b for b in self.source_lines]] #-----1D array/Serial -------
+      self.json_data    = json.dumps([i for i in csv.DictReader(self.net_list,fieldnames=self.data_headers)])
+      self.write_to_json_file()          
     self.book = owork(self.source)
     self.sheet = self.book.sheet_by_name(self.sheet)
     
