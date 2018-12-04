@@ -14,7 +14,7 @@ class Json_convertor:
 
   global opener
 
-  def __init__(self,source_workbook,sheet_name,dest):
+  def __init__(self,source_workbook,sheet_name="",dest="json_file.json"):
     self.source = source_workbook
     self.sheet  = sheet_name
     self.destination  = dest
@@ -29,7 +29,10 @@ class Json_convertor:
       self.json_data    = json.dumps([i for i in csv.DictReader(self.net_list,fieldnames=self.data_headers)])
       self.write_to_json_file()
     self.book = owork(self.source)
-    self.sheet = self.book.sheet_by_name(self.sheet)
+    if len(self.sheet):
+        self.sheet = self.book.sheet_by_name(self.sheet)
+    else:
+        self.sheet = self.book.sheet_by_index(0)
     self.process_sheet_data()
 
   def process_sheet_data(self):
