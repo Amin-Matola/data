@@ -68,9 +68,6 @@ class Data:
             self.data_list += b
         self.file_lines = self.data_list
 
-
-
-
     if len(self.data_fields)>0:
         if self.file_loc.lower().startswith('internet'):
             print('reading internet data list from %s...'%self.file)
@@ -101,7 +98,6 @@ class Data:
      self.local_file.close()
 
      print("JSON Data written into %s successfully!"%self.dest)
-
 
   def __str__(self):
       self.date = datetime.datetime.now().strftime('%d %B %Y')
