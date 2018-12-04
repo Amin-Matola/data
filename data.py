@@ -51,7 +51,7 @@ class Data:
         self.remote_file_bytes = self.remote_file.read()
         self.remote_file_string= self.remote_file.decode()
       except Exception as e:
-        return "Error openning file at %s.\n %s"%(self.dest,e)
+        return "Error openning file at %s.\n %s"%(self.file,e)
     else: #--------Then it is a file in a local disk----------------|
         self.remote_file_string = open(self.file,'r+')
 
@@ -73,7 +73,7 @@ class Data:
 
     if len(self.data_fields)>0:
         if self.file_loc.lower().startswith('internet'):
-            print('reading internet lists from %s...'%self.dest)
+            print('reading internet data list from %s...'%self.file)
             self.file_dict  = csv.DictReader(self.remote_file_string,fieldnames=self.data_fields)
         else:
             print('reading the local opening of %s...'%self.file)
@@ -92,15 +92,10 @@ class Data:
      self.write_to_json_file()
 
   def write_to_json_file(self):
-     print('writing to json file...')
+     print('writing json data to %s...'%self.dest)
     #------- Now store json results, the 'with' will automatically close the file once done.------|
      try:
       self.local_file = open(self.dest,'w+')
-      for a in self.json_data:
-          self.local_file.write(a)
-          self.local_file.write('\n')
-      self.local_file.close()
-
      except Exception as e:
         self.error = """Wo! Wo! Wait, there was an error writing to %s,
                        please check destination file location.\n The error returned was %"""%(self.dest,self.error)
@@ -117,6 +112,10 @@ class Data:
             self.write_to_json_file()
         else:
            return self.error
+     for a in self.json_data:
+          self.local_file.write(a)
+          self.local_file.write('\n')
+     self.local_file.close()
 
      print("JSON Data written into %s successfully!"%self.dest)
 
