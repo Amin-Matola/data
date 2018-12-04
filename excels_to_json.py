@@ -48,3 +48,8 @@ class Json_convertor:
         self.json_file  = open(self.destination, 'w+')
         self.json_file.write(self.json_data)
         self.json_file.close()
+      self.verify_writing()
+      
+    def verify_writing(self):
+      print("Json data written to %s successfully."%self.destination)
+      return
