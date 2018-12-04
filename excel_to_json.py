@@ -18,7 +18,6 @@ class Json_convertor:
     self.source = source_workbook
     self.sheet  = sheet_name
     self.destination  = dest
-
     self.process_workbook()
 
   def process_workbook(self):
@@ -31,7 +30,6 @@ class Json_convertor:
       self.write_to_json_file()
     self.book = owork(self.source)
     self.sheet = self.book.sheet_by_name(self.sheet)
-
     self.process_sheet_data()
 
   def process_sheet_data(self):
@@ -46,13 +44,12 @@ class Json_convertor:
       for column, cell in enumerate(self.sheet.row(row_number)):
         self.row_data[self.data_headers[column]] = cell.value
       self.excel_data.append(self.row_data)
-
     self.convert_to_json()
 
   def convert_to_json(self):
       self.json_data  = json.dumps({'results': self.excel_data})
+      self.write_to_json_file()
 
-      self.write_to_json_file(self)
   def write_to_json_file(self):
         self.json_file  = open(self.destination, 'w+')
         self.json_file.write(self.json_data)
