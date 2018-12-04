@@ -21,10 +21,10 @@ class Data:
   global opener
 
 
-  def __init__(self,file_location,destination,*fieldnames):
+  def __init__(self,file_location,destination,iterable_fieldnames=[]):
     self.file = file_location
     self.dest = destination
-    self.data_fields = fieldnames
+    self.data_fields = iterable_fieldnames
     self.check_inputs()
 
   def check_inputs(self):
@@ -53,8 +53,8 @@ class Data:
       except Exception as e:
         return "Error openning file at %s.\n %s"%(self.dest,e)
     else: #--------Then it is a file in a local disk----------------|
-        self.remote_file = open(self.dest,'r+')
-        self.remote_file_string = self.remote_file.read()
+        self.remote_file_string = open(self.file,'r+')
+
 
     self.process_data()
 
@@ -72,20 +72,22 @@ class Data:
 
 
     if len(self.data_fields):
-        if self.file.lower().startswith('internet'):
+        if self.file_loc.lower().startswith('internet'):
             print('reading internet lists from %s...'%self.dest)
-            self.file_dict  = csv.DictReader(self.file_lines,fieldnames=self.data_fields[0])
+            self.file_dict  = csv.DictReader(self.remote_file_string,fieldnames=self.data_fields)
         else:
-            print('reading the local opening of %s...'%self.dest)
-            self.file_dict  = csv.DictReader(open(self.file),fieldnames=self.data_fields[0])
+            print('reading the local opening of %s...'%self.file)
+            self.file_dict  = csv.DictReader(self.remote_file_string,fieldnames=self.data_fields)
 
     else:
       return "The syntax for calling this class is data=Data(file_location,destination_file,iterable_field_names)"
     self.convert_to_json()
 
   def convert_to_json(self):
-     print('converting to %s json...'%str(self.file_dict))
-     self.json_data = json.dumps([line for line in self.file_dict])
+     print('converting %s contents to json...'%str(self.file))
+     self.json_data  = []
+     for k in [line for line in self.file_dict]:
+         self.json_data.append(json.dumps(k))
      self.write_to_json_file()
 
   def write_to_json_file(self):
@@ -93,15 +95,17 @@ class Data:
     #------- Now store json results, the 'with' will automatically close the file once done.------|
      try:
       self.local_file = open(self.dest,'w+')
-      self.local_file.write(self.json_data)
+      for a in self.json_data:
+          self.local_file.write(a)
+          self.local_file.write('\n')
       self.local_file.close()
 
      except Exception as e:
         self.error = """Wo! Wo! Wait, there was an error writing to %s,
                        please check destination file location.\n The error returned was %"""%(self.dest,self.error)
 
-        choice     = input(self.error+"\n Would you like us to create this file for you in the current directory?(y/n)")
-        if choice.lower()=='y':
+        self.choice     = input(self.error+"\n Would you like us to create this file for you in the current directory?(y/n)")
+        if self.choice.lower()=='y':
           if len(self.dest.split('/'))>1:
            self.dest = os.mknod(os.path.join(os.getcwd(),self.dest.split('/')[-1]))
 
