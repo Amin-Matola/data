@@ -19,6 +19,7 @@ class Pylog:
         self.user   = username
         self.passwd = password
         self.browser= webdriver.Firefox('/path/to/firefoxdriver.exe')     # or null for automatic search
+        self.get_source()                                                 # lets now work with the source code
         
     # We will be using our above firefox webdriver for this code
     
@@ -39,9 +40,8 @@ class Pylog:
            self.password = self.browser.find_element_by_name('password')  # getting password input field...
            self.password.send_keys(self.passwd)
            time.sleep(0.5)
-           self.log_butn = self.browser.find_element_by_xpath('//[@type='submit'])   # getting submit input field...
-               
-           self.login()
+           self.log_butn = self.browser.find_element_by_xpath("//[@type='submit']")   # getting submit input field...   
+           self.login()                                                               # lets now call the actual login
            
     def login(self):
              try:
