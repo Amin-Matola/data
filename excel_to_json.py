@@ -14,10 +14,10 @@ class Json_convertor:
 
   global opener
 
-  def __init__(self,source_workbook,sheet_name="",dest="json_file.json"):
-    self.source = source_workbook
-    self.sheet  = sheet_name
-    self.destination  = dest
+  def __init__(self,source_workbook, sheet_name="", dest="json_file.json"):
+    self.source         = source_workbook
+    self.sheet          = sheet_name
+    self.destination    = dest
     self.process_workbook()
 
   def process_workbook(self):
