@@ -1,3 +1,5 @@
-from app import App
+from app import App, sys
 
-App()
+app = App()
+app.show()
+sys.exit(app.build())
