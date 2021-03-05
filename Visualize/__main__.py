@@ -1,5 +1,3 @@
-from app import App, sys
+from app import App
 
-app = App()
-app.show()
-sys.exit(app.build())
+App.boot()
