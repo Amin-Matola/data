@@ -1,19 +1,23 @@
-import sys, pandas as pd
+"""
+The main Application Window for this app
+"""
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtSql import *
 from data import *
+from os import path, getcwd
 
-app = QApplication(sys.argv)
+# Save this object for calling during execution
+defaultApp = QApplication(sys.argv)
 
-class MainWindow(QWidget):
+class App(QWidget):
 
 	def __init__(self, image = ''):
-		super(MainWindow, self).__init__()
+		super(App, self).__init__()
 
 		self._layout = QGridLayout()
-		self.style 	 = eval(open("style.txt").read())
+		self.style 	 = self.loadStyles()
 		self.aspie 	 = False
 		self.setUp()
 		
@@ -34,6 +38,11 @@ class MainWindow(QWidget):
 		self.x 					= ""
 		self.y 					= ""
 		self.its 				= []
+
+	def loadStyles(self):
+		if self.curdir() != self.package():
+			return eval(open(f"{self.package()}/style.txt").read())
+		return eval(open("./style.txt").read())
 
 
 	def setUp(self):
@@ -117,11 +126,7 @@ class MainWindow(QWidget):
 
 		if not len(self.x) or not len(self.y):
 			return
-		master = Visualizer(self.files, 
-					self.x, 
-					self.y,
-					filt="Venous"
-					)
+		master = Data (self.files, self.x, self.y,filt="Venous")
 		master.setAxisLabels("", "%s per CCG"%self.y)
 		master.plot(False, pie=self.aspie)
 		self.load_image()
@@ -149,21 +154,30 @@ class MainWindow(QWidget):
 
 		self.draw()
 
+	def curdir(self):
+		return path.basename(getcwd())
+
+	def package(self):
+			return path.basename(path.dirname(path.abspath(__file__)))
+
+	def build(self):
+		return defaultApp.exec_()
+
+	def boot():
+		app = App()
+		app.show()
+		sys.exit(defaultApp.exec_())
+
 		
 		
 
 
 
 
-		
-
-
-def load_image(image):
-	window = MainWindow()
-	window.show()
-	sys.exit(app.exec_())
-
-if __name__ == "__main__":
-	window = MainWindow()
-	window.show()
-	sys.exit(app.exec_())
+# Incase it is called on console
+if len(sys.argv):
+	if len(sys.argv) > 1 and sys.argv[1] == "-b":
+		App.boot()
+	else:
+		if not sys.argv[0].__eq__("."):
+			print("\n\tAdd -b to the end of the file call to start the app.")
