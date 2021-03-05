@@ -133,8 +133,8 @@ class App(QWidget):
 		#master.plot(True, pie=False)
 
 	def file_dialog(self):
-		f, _ 				= QFileDialog.getOpenFileName(self, "Load Image", "~/Desktop/", "Files (*.xlsx, *.xls)")
-		d 					= ""
+		f, _ 		= QFileDialog.getOpenFileName(self, "Load Image", "~/Desktop/", "Files (*.xlsx, *.xls)")
+		d 		= ""
 		
 		if len(f) and not f in self.files:
 			self.files.append(f)
