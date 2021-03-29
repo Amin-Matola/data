@@ -1,3 +1,9 @@
+"""
+PySide table automation
+
+Author: 	Amin Matola
+"""
+
 from PySide2.QtWidgets import (
 	QWidget, QVBoxLayout, QApplication, 
 	QTableWidget, QTableWidgetItem, QHeaderView,
@@ -6,37 +12,38 @@ from PySide2.QtWidgets import (
 
 from numpy import genfromtxt
 
-app = QApplication([])
+app 					= 	QApplication([])
 
 class Table(QWidget):
 
 	def __init__(self, data = []):
 		super(Table, self).__init__()
 
-		self.data_  = data
-		self.btn 	= QPushButton("Open")
-		self.table 	= False
+		self.data_  		= 	data
+		self.btn 		= 	QPushButton("Open")
+		self.table 		= 	False
 
 		self.btn.clicked.connect(self.open)
 
 		self.setTable()
-		self.ly 	= QVBoxLayout()
+		self.ly 		= 	QVBoxLayout()
 
 		self.ly.addWidget(self.btn)
 		self.ly.addWidget(self.table)
 		self.setLayout(self.ly)
 
 	def open(self):
-		name 	= QFileDialog.getOpenFileName(self, "", "")
+		name 			= 	QFileDialog.getOpenFileName(self, "", "")
 		try:
-			self.data_ 	= genfromtxt(name[0], 
-				dtype=str, 
-				invalid_raise=False,
-				missing_values='',
+			self.data_ 	= 	genfromtxt(
+				name[0], 
+				dtype = str, 
+				invalid_raise = False,
+				missing_values = '',
 				loose = True,
 				usemask = False,
-				filling_values="N/a",
-				delimiter=",")
+				filling_values = "N/a",
+				delimiter = ",")
 		except:
 			pass
 
@@ -49,7 +56,7 @@ class Table(QWidget):
 
 		if not len(self.data_):
 			return
-		self.hders 	= self.data_[0]
+		self.hders 		= self.data_[0]
 		
 		self.table.setRowCount(len(self.data_))
 		self.table.setColumnCount(len(self.hders))
